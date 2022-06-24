@@ -10,3 +10,13 @@ services:
     volumes:
       - ./api/db/data:/var/lib/mysql
       - ./api/db/script.sql:/docker-entrypoint-initdb.d/script.sql
+  api:
+    build: "./api"
+    container_name: node-container
+    restart: always
+    volumes:
+      - ./api:/home/node/app
+    ports:
+      - "9001:9001"
+    depends_on:
+      - db
