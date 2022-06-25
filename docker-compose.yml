@@ -20,3 +20,13 @@ services:
       - "9001:9001"
     depends_on:
       - db
+  web:
+    build: "./bycoders-challenge-front"
+    container_name: react-container
+    restart: always
+    volumes:
+      - ./bycoders-challenge-front:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
