@@ -1,0 +1,12 @@
+.select select {
+    height: 2rem;
+    width: 12.8rem;
+    border-radius: 5px;
+    padding: 0.4rem;
+}
+
+.card {
+    color: yellowgreen;
+}
+  
+  
