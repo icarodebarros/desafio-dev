@@ -66,11 +66,28 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
 
     return (
         <React.Fragment>
-            <div className={'card ' + classes.select}>
-                <select id='stores' onChange={onSelectChange} defaultValue='emptySelect'>
-                    <option value='emptySelect' key='select' disabled>Select a Store...</option>
-                    {storeOptions}
-                </select>
+            <div className={'card ' + classes.selectionContainer}>
+                <div className={classes.radioGroupSection}>
+                  <label>Show data from:</label>
+                  <div className={classes.radioGroup}>
+                    <span>
+                      <input type="radio" name="dataSource" id="fromFile" value="fromFile" />
+                      <label htmlFor="fromFile">current file</label>
+                    </span>
+
+                    <span>
+                      <input type="radio" name="dataSource" id="fromDB" value="fromDB" />
+                      <label htmlFor="fromDB">database</label>
+                    </span>
+                  </div>
+                </div>
+
+                <div className={classes.select}>
+                  <select id='stores' onChange={onSelectChange} defaultValue='emptySelect'>
+                      <option value='emptySelect' key='select' disabled>Select a Store...</option>
+                      {storeOptions}
+                  </select>
+                </div>
             </div>
 
             <div className='card'>
