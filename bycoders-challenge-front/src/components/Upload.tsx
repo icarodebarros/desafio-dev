@@ -77,8 +77,21 @@ const Upload: React.FC<UploadProps> = (props) => {
     }
 
     const saveData = () => {
-        //TODO
-    }
+        APIConnectService.saveTransactions(dataToSave)
+          .then((res) => {
+            console.log(res);
+            setFileSavingMessage({
+              successful: true,
+              message: 'File saved successfuly'
+            });          
+          })
+          .catch((err) => {
+            setFileSavingMessage({
+              successful: false,
+              message: err+''
+            });
+          })
+      }
   
     return (
         <form>
