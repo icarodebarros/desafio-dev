@@ -9,7 +9,6 @@ import './App.css';
 function App() {
   const [transactions, setTransactions] = useState<FinancialMovement[] | null>([]);
   const [fileTransactions, setFileTransactions] = useState<FinancialMovement[]>([]);
-  const [dataSource, setDataSource] = useState<dataSourceType>('fromDB');
   const [isFileCorrect, setIsFileCorrect] = useState<boolean>(false);
   const [dbDataErrorMessage, setDbDataErrorMessage] = useState<string>();
 
@@ -21,7 +20,6 @@ function App() {
           .map(t => ({...t, datetime: new Date(t.datetime), value: +t.value}));
   
         setTransactions(transactionsList);
-        setDataSource('fromDB');
       })
       .catch((err) => {
         setTransactions(null);
@@ -31,7 +29,7 @@ function App() {
 
   const transactionsFromFile = (t: FinancialMovement[]) => {
     setFileTransactions(t);
-    if (t.length) setIsFileCorrect(true);
+    setIsFileCorrect(!!t.length);
   };
 
   return (
@@ -46,7 +44,6 @@ function App() {
         <TransactionsList 
           transactions={transactions}
           fileTransactions={fileTransactions}
-          dataSource={dataSource}
           isFileRadioEnabled={isFileCorrect}
         />
       )}

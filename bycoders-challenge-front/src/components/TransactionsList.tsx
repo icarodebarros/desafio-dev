@@ -10,7 +10,6 @@ export type dataSourceType = 'fromDB' | 'fromFile';
 interface TransactionsListProps {
     transactions: FinancialMovement[];
     fileTransactions: FinancialMovement[];
-    dataSource: dataSourceType;
     isFileRadioEnabled: boolean;
 }
 
@@ -21,12 +20,14 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
 
     useEffect(() => {
         loadStoreOptions(selectedDataSource);
+        if (selectedDataSource === 'fromFile' && !props.fileTransactions.length) {
+          setFilteredTransactions([]);
+        }
     }, [props.transactions, props.fileTransactions]);
 
     useEffect(() => {
-      setSelectedDataSource(props.dataSource);
-      loadStoreOptions(props.dataSource);
-    }, [props.dataSource]);
+      onRadioChange(props.isFileRadioEnabled ? 'fromFile' : 'fromDB');
+    }, [props.isFileRadioEnabled]);
 
     const loadStoreOptions = (dataSource: dataSourceType) => {
       const storeNames: string[] = [];
@@ -43,8 +44,8 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
       setStoreOptions(options);
     }
 
-    const onRadioChange = (ev: ChangeEvent<HTMLInputElement>) => {
-      const selected = ev.target.value as dataSourceType;
+    const onRadioChange = (selected: dataSourceType) => {
+      // const selected = ev.target.value as dataSourceType;
       setSelectedDataSource(selected);
       loadStoreOptions(selected);
       setFilteredTransactions([]);
@@ -91,9 +92,9 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                   <label>Show data from:</label>
                   <div className={classes.radioGroup}>
                       <label>
-                        <input type="radio" name="dataSource" value="fromDB" 
+                        <input type="radio" name="dataSource" value={'fromDB'} 
                           checked={selectedDataSource === 'fromDB'}
-                          onChange={onRadioChange}
+                          onChange={(ev) => onRadioChange(ev.target.value as dataSourceType)}
                         />
                         <span>database</span>
                       </label>
@@ -102,7 +103,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                         <input type="radio" name="dataSource" value="fromFile"
                           disabled={!props.isFileRadioEnabled}
                           checked={selectedDataSource === 'fromFile'}
-                          onChange={onRadioChange}
+                          onChange={(ev) => onRadioChange(ev.target.value as dataSourceType)}
                         />
                         <span className={!props.isFileRadioEnabled ? classes.disabled: ''}>current file</span>                        
                       </label>
