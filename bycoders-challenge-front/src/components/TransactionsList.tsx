@@ -10,6 +10,7 @@ export type dataSourceType = 'fromDB' | 'fromFile';
 interface TransactionsListProps {
     transactions: FinancialMovement[];
     dataSource: dataSourceType;
+    isFileRadioEnabled: boolean;
 }
 
 const TransactionsList: React.FC<TransactionsListProps> = (props) => {
@@ -82,15 +83,16 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                           checked={props.dataSource === 'fromDB'}
                           onChange={onRadioChange}
                         />
-                        database
+                        <span>database</span>
                       </label>
 
                       <label>
                         <input type="radio" name="dataSource" value="fromFile"
+                          disabled={!props.isFileRadioEnabled}
                           checked={props.dataSource === 'fromFile'}
                           onChange={onRadioChange}
                         />
-                        current file
+                        <span className={!props.isFileRadioEnabled ? classes.disabled: ''}>current file</span>                        
                       </label>
                   </div>
                 </div>

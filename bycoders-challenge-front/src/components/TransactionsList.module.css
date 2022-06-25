@@ -52,20 +52,7 @@
     gap: 5px;
 }
 
-input[type='radio']:after {
-    width: 20px;
-    height: 20px;
-    border-radius: 15px;
-    top: -6px;
-    left: -7px;
-    position: relative;
-    background-color: white;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 2px solid gray;
-}
-
+input[type='radio']:after,
 input[type='radio']:checked:after {
     width: 20px;
     height: 20px;
@@ -73,10 +60,27 @@ input[type='radio']:checked:after {
     top: -6px;
     left: -7px;
     position: relative;
-    background-color: darkslategrey;
     content: '';
     display: inline-block;
     visibility: visible;
+}
+
+input[type='radio']:after {
+    background-color: white;
     border: 2px solid gray;
+}
+
+input[type='radio']:checked:after {
+    background-color: darkslategrey;
+    border: 2px solid gray;
+}
+
+input[type='radio']:disabled:after {
+    background-color: white;
+    border: 2px solid lightgray;
+}
+
+.disabled {
+    color: lightgray;
 }
   
