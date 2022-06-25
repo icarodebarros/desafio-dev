@@ -1,6 +1,7 @@
-import { ChangeEvent, useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { FinancialMovement } from "../models/financialMovement";
 import { FinancialMovementFactory } from "../models/financialMovementFactory";
+import { APIConnectService } from "../services/apiConnect.service";
 
 import classes from "./Upload.module.css";
 
@@ -15,12 +16,17 @@ interface UploadProps {
 
 const Upload: React.FC<UploadProps> = (props) => {
     const [fileSelectionMessage, setFileSelectionMessage] = useState<selectFileFeedback>();
+    const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState<boolean>(false);
+    const [fileSavingMessage, setFileSavingMessage] = useState<selectFileFeedback>();
+    const [dataToSave, setDataToSave] = useState<FinancialMovement[]>([]);
 
     const onChange = (ev: ChangeEvent<HTMLInputElement>) => {
+        setIsSaveButtonEnabled(false);
         const textType = /text.*/;
         const extension = (ev.target.value as string).split('.')[1];
         if (ev.target.files && ev.target.files[0]) {
             setFileSelectionMessage(undefined);
+            setDataToSave([]);
             props.onSetTransactions([]);
 
             if (ev.target.files[0].type.match(textType) && extension === 'txt') {
@@ -47,6 +53,8 @@ const Upload: React.FC<UploadProps> = (props) => {
                 try {
                     const financialMovs = lines.map(FinancialMovementFactory.build);
                     props.onSetTransactions(financialMovs);
+                    setDataToSave(financialMovs);
+                    setIsSaveButtonEnabled(true);
                     
                     setFileSelectionMessage({
                         successful: true,
@@ -68,26 +76,41 @@ const Upload: React.FC<UploadProps> = (props) => {
         reader.readAsText(ev.target.files![0]);
     }
 
+    const saveData = () => {
+        //TODO
+    }
+  
     return (
         <form>
-            <p>Please upload your CNAB file:</p>
+          <p>Please select your CNAB file. <span>(Check below file information before saving)</span></p>
+          <div className={classes.buttonsContainer}>
             <div className={classes.uploadContainer}>
-                <div>
-                    <label htmlFor="fileInput" className={classes.upFileLabel}>Upload</label><br />
-                    <input type="file" id="fileInput" name='fileInput' accept='.txt' onChange={onChange} />
-                </div>
-                <div className={classes.feedbackMsg}>
+              <div>
+                <label htmlFor="fileInput" className={classes.upFileLabel}>Select file</label>
+                <input type="file" id="fileInput" name='fileInput' accept='.txt' onChange={onChange} />
+              </div>
+              <div className={classes.feedbackMsg}>
                 {!!fileSelectionMessage && (
                   <p className={fileSelectionMessage.successful ? classes.success : classes.fail }>
                     {fileSelectionMessage.message}
                   </p>
                 )}
-                </div>
+              </div>
             </div>
+            <div>
+              <button type="button" onClick={saveData} disabled={!isSaveButtonEnabled}>Save</button>
+              <div className={classes.feedbackMsg}>
+                {!!fileSavingMessage && (
+                  <p className={fileSavingMessage.successful ? classes.success : classes.fail }>
+                    {fileSavingMessage.message}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
 
         </form>
     );
-
-}
-
-export default Upload;
+  };
+  
+  export default Upload;
