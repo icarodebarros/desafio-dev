@@ -8,7 +8,7 @@ import classes from './TransactionsList.module.css';
 export type dataSourceType = 'fromDB' | 'fromFile';
 
 interface TransactionsListProps {
-    transactions: FinancialMovement[];
+    dbTransactions: FinancialMovement[];
     fileTransactions: FinancialMovement[];
     isFileRadioEnabled: boolean;
 }
@@ -23,7 +23,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
         if (selectedDataSource === 'fromFile' && !props.fileTransactions.length) {
           setFilteredTransactions([]);
         }
-    }, [props.transactions, props.fileTransactions]);
+    }, [props.dbTransactions, props.fileTransactions]);
 
     useEffect(() => {
       onRadioChange(props.isFileRadioEnabled ? 'fromFile' : 'fromDB');
@@ -31,7 +31,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
 
     const loadStoreOptions = (dataSource: dataSourceType) => {
       const storeNames: string[] = [];
-      const t = dataSource === 'fromDB' ? props.transactions : props.fileTransactions;
+      const t = dataSource === 'fromDB' ? props.dbTransactions : props.fileTransactions;
       t.forEach(item => {
         const index = storeNames.findIndex((storeName) => storeName === item.storeName);
         if (index === -1) {
@@ -53,7 +53,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
 
     const onSelectChange = (ev: ChangeEvent<HTMLSelectElement>) => {
       const store = ev.target.value;
-      const movs = selectedDataSource === 'fromDB' ? props.transactions : props.fileTransactions;
+      const movs = selectedDataSource === 'fromDB' ? props.dbTransactions : props.fileTransactions;
       setFilteredTransactions(movs.filter(t => t.storeName === store));
     }
 

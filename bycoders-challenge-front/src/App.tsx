@@ -7,7 +7,7 @@ import { APIConnectService } from './services/apiConnect.service';
 import './App.css';
 
 function App() {
-  const [transactions, setTransactions] = useState<FinancialMovement[] | null>([]);
+  const [dbTransactions, setDbTransactions] = useState<FinancialMovement[] | null>([]);
   const [fileTransactions, setFileTransactions] = useState<FinancialMovement[]>([]);
   const [isFileCorrect, setIsFileCorrect] = useState<boolean>(false);
   const [dbDataErrorMessage, setDbDataErrorMessage] = useState<string>();
@@ -19,10 +19,10 @@ function App() {
         const transactionsList = (res as FinancialMovement[])
           .map(t => ({...t, datetime: new Date(t.datetime), value: +t.value}));
   
-        setTransactions(transactionsList);
+        setDbTransactions(transactionsList);
       })
       .catch((err) => {
-        setTransactions(null);
+        setDbTransactions(null);
         setDbDataErrorMessage(`Unable to fetch data from API - ${err}`);
       })
   }, []);
@@ -40,14 +40,14 @@ function App() {
         <Upload onSetTransactions={transactionsFromFile}></Upload>
       </div>
 
-      {!!transactions && (
+      {(!!dbTransactions) && (
         <TransactionsList 
-          transactions={transactions}
+          dbTransactions={dbTransactions}
           fileTransactions={fileTransactions}
           isFileRadioEnabled={isFileCorrect}
         />
       )}
-      {(!transactions && dbDataErrorMessage) && (
+      {(!dbTransactions && dbDataErrorMessage) && (
         <div className='card'>
           <span className='error-msg'>
             {dbDataErrorMessage}
