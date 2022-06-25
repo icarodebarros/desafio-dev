@@ -14,6 +14,7 @@ interface TransactionsListProps {
 
 const TransactionsList: React.FC<TransactionsListProps> = (props) => {
     const [storeOptions, setStoreOptions] = useState<JSX.Element[]>([]);
+    const [selectedOptionValue, setSelectedOptionValue] = useState<string>('empty');
     const [filteredTransactions, setFilteredTransactions] = useState<FinancialMovement[]>([]);
     const [selectedDataSource, setSelectedDataSource] = useState<dataSourceType>('fromDB');
 
@@ -40,6 +41,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
       const options = storeNames.map(storeName => (
         <option value={storeName} key={storeName}>{storeName}</option>
       ));
+      console.log(options)
       setStoreOptions(options);
     }
 
@@ -47,10 +49,12 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
       setSelectedDataSource(selected);
       loadStoreOptions(selected);
       setFilteredTransactions([]);
+      setSelectedOptionValue('empty')
     }
 
     const onSelectChange = (ev: ChangeEvent<HTMLSelectElement>) => {
       const store = ev.target.value;
+      setSelectedOptionValue(store);
       const movs = selectedDataSource === 'fromDB' ? props.dbTransactions : props.fileTransactions;
       setFilteredTransactions(movs.filter(t => t.storeName === store));
     }
@@ -110,8 +114,8 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                 </div>
 
                 <div className={classes.select}>
-                  <select id='stores' onChange={onSelectChange} defaultValue='emptySelect'>
-                      <option value='emptySelect' key='select'>Select a Store...</option>
+                  <select id='stores' onChange={onSelectChange} value={selectedOptionValue} defaultValue='empty'>
+                      <option value='empty' key='empty'>Select a Store...</option>
                       {storeOptions}
                   </select>
                 </div>
