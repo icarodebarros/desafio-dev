@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { FinancialMovement } from '../models/financialMovement';
+import { Utils } from '../utils/functions';
 import { TransactionTypes } from '../utils/transaction-types';
 import classes from './TransactionsList.module.css';
 
@@ -43,7 +44,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                 <div>Date/hour: <span>{t.datetime.toLocaleString("pt-BR")}</span></div>
                 <div>Type: <span>{TransactionTypes.get(t.type)?.description}</span></div>
                 <div>Value: <span className={TransactionTypes.get(t.type)?.inOut === '+' ?
-                  classes.valueG : classes.valueR}>{formatCurrency(t.value)}</span>
+                  classes.valueG : classes.valueR}>{Utils.formatCurrency(t.value)}</span>
                 </div>
             </div>
           ));
@@ -55,7 +56,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
               <div className={classes.transactionHeader}>{storeName} <span>({ownerName})</span></div>
               {list}
               <p className={classes.total}>Total: <span className={total >= 0 ?
-                  classes.valueG : classes.valueR}>{formatCurrency(total)}</span></p>
+                  classes.valueG : classes.valueR}>{Utils.formatCurrency(total)}</span></p>
             </React.Fragment>
           );
     
@@ -68,10 +69,6 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
         return filteredTransactions.reduce((pre, cur) => {
           return TransactionTypes.get(cur.type)?.inOut === '+' ? pre + cur.value : pre - cur.value;
         }, 0);
-    };
-    
-    const formatCurrency = (value: number) => {
-        return value.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL', minimumFractionDigits: 2});
     };
 
     return (
