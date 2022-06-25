@@ -2,6 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { FinancialMovement } from '../models/financialMovement';
 import { Utils } from '../utils/functions';
 import { TransactionTypes } from '../utils/transaction-types';
+import TransactionItem from './TransactionItem';
 import classes from './TransactionsList.module.css';
 
 interface TransactionsListProps {
@@ -37,16 +38,8 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
 
     const getTransactionsList = () => {
         if(!!filteredTransactions.length) {
-          const list = filteredTransactions.map(t => (
-            <div className={classes.transactionItem} key={t.datetime.getTime() + t.value}>
-                <div>Card: <span>{t.card}</span></div>
-                <div>CPF: <span>{t.cpf}</span></div>
-                <div>Date/hour: <span>{t.datetime.toLocaleString("pt-BR")}</span></div>
-                <div>Type: <span>{TransactionTypes.get(t.type)?.description}</span></div>
-                <div>Value: <span className={TransactionTypes.get(t.type)?.inOut === '+' ?
-                  classes.valueG : classes.valueR}>{Utils.formatCurrency(t.value)}</span>
-                </div>
-            </div>
+          const list = filteredTransactions.map((t, i) => (
+            <TransactionItem transaction={t} index={i}></TransactionItem>
           ));
           const {storeName, ownerName} = filteredTransactions[0];
           const total = getTotal();
@@ -56,7 +49,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
               <div className={classes.transactionHeader}>{storeName} <span>({ownerName})</span></div>
               {list}
               <p className={classes.total}>Total: <span className={total >= 0 ?
-                  classes.valueG : classes.valueR}>{Utils.formatCurrency(total)}</span></p>
+                  'valueG' : 'valueR' }>{Utils.formatCurrency(total)}</span></p>
             </React.Fragment>
           );
     
