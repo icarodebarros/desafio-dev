@@ -5,14 +5,16 @@ import { TransactionTypes } from '../utils/transaction-types';
 import TransactionItem from './TransactionItem';
 import classes from './TransactionsList.module.css';
 
+export type dataSourceType = 'fromDB' | 'fromFile';
+
 interface TransactionsListProps {
     transactions: FinancialMovement[];
+    dataSource: dataSourceType;
 }
 
 const TransactionsList: React.FC<TransactionsListProps> = (props) => {
     const [storeOptions, setStoreOptions] = useState<JSX.Element[]>([]);
     const [filteredTransactions, setFilteredTransactions] = useState<FinancialMovement[]>([]);
-    const [dataSource, setDataSource] = useState<'fromDB' | 'fromFile'>('fromDB');
 
     useEffect(() => {
         loadStoreOptions();
@@ -77,7 +79,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                   <div className={classes.radioGroup}>
                       <label>
                         <input type="radio" name="dataSource" value="fromDB" 
-                          checked={dataSource === 'fromDB'}
+                          checked={props.dataSource === 'fromDB'}
                           onChange={onRadioChange}
                         />
                         database
@@ -85,7 +87,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
 
                       <label>
                         <input type="radio" name="dataSource" value="fromFile"
-                          checked={dataSource === 'fromFile'}
+                          checked={props.dataSource === 'fromFile'}
                           onChange={onRadioChange}
                         />
                         current file
