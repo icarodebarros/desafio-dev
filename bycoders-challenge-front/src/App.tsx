@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import TransactionsList from './components/TransactionsList';
 import Upload from './components/Upload';
