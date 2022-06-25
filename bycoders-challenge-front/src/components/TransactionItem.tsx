@@ -6,13 +6,12 @@ import classes from './TransactionItem.module.css';
 
 interface TransactionItemProps {
     transaction: FinancialMovement;
-    index: number
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = (props) => {
 
     return (
-        <div className={classes.transactionItem} key={props.index + Math.random()}>
+        <div className={classes.transactionItem}>
             <div>
                 Card: <span>{props.transaction.card}</span>
             </div>

@@ -39,7 +39,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
     const getTransactionsList = () => {
         if(!!filteredTransactions.length) {
           const list = filteredTransactions.map((t, i) => (
-            <TransactionItem transaction={t} index={i}></TransactionItem>
+            <TransactionItem transaction={t} key={i + Math.random()} />
           ));
           const {storeName, ownerName} = filteredTransactions[0];
           const total = getTotal();
