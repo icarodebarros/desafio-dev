@@ -9,7 +9,11 @@ interface selectFileFeedback {
     message: string
 }
 
-const Upload: React.FC<any> = (props) => {
+interface UploadProps {
+    onSetTransactions: (t: FinancialMovement[]) => void;
+}
+
+const Upload: React.FC<UploadProps> = (props) => {
     const [fileSelectionMessage, setFileSelectionMessage] = useState<selectFileFeedback>();
 
     const onChange = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -17,6 +21,7 @@ const Upload: React.FC<any> = (props) => {
         const extension = (ev.target.value as string).split('.')[1];
         if (ev.target.files && ev.target.files[0]) {
             setFileSelectionMessage(undefined);
+            props.onSetTransactions([]);
 
             if (ev.target.files[0].type.match(textType) && extension === 'txt') {
                 parseFile(ev);
@@ -41,7 +46,8 @@ const Upload: React.FC<any> = (props) => {
                 const lines = (text as string).split('\n');
                 try {
                     const financialMovs = lines.map(FinancialMovementFactory.build);
-                    console.log(financialMovs);
+                    props.onSetTransactions(financialMovs);
+                    
                     setFileSelectionMessage({
                         successful: true,
                         message: 'File selected successfuly'
