@@ -12,6 +12,7 @@ interface TransactionsListProps {
 const TransactionsList: React.FC<TransactionsListProps> = (props) => {
     const [storeOptions, setStoreOptions] = useState<JSX.Element[]>([]);
     const [filteredTransactions, setFilteredTransactions] = useState<FinancialMovement[]>([]);
+    const [dataSource, setDataSource] = useState<'fromDB' | 'fromFile'>('fromDB');
 
     useEffect(() => {
         loadStoreOptions();
@@ -29,6 +30,10 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
           <option value={storeName} key={storeName}>{storeName}</option>
         ));
         setStoreOptions(options);
+    }
+
+    const onRadioChange = (ev: ChangeEvent<HTMLInputElement>) => {
+      console.log('onRadio', ev.target.value)
     }
 
     const onSelectChange = (ev: ChangeEvent<HTMLSelectElement>) => {
@@ -70,15 +75,21 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                 <div className={classes.radioGroupSection}>
                   <label>Show data from:</label>
                   <div className={classes.radioGroup}>
-                    <span>
-                      <input type="radio" name="dataSource" id="fromFile" value="fromFile" />
-                      <label htmlFor="fromFile">current file</label>
-                    </span>
+                      <label>
+                        <input type="radio" name="dataSource" value="fromDB" 
+                          checked={dataSource === 'fromDB'}
+                          onChange={onRadioChange}
+                        />
+                        database
+                      </label>
 
-                    <span>
-                      <input type="radio" name="dataSource" id="fromDB" value="fromDB" />
-                      <label htmlFor="fromDB">database</label>
-                    </span>
+                      <label>
+                        <input type="radio" name="dataSource" value="fromFile"
+                          checked={dataSource === 'fromFile'}
+                          onChange={onRadioChange}
+                        />
+                        current file
+                      </label>
                   </div>
                 </div>
 
