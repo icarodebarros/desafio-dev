@@ -31,7 +31,7 @@ const sendRequest = async (url: string, op: 'get' | 'post', data?: any) => {
             res = await sendPostRequest(url, data);
         }
     } catch(_err) {
-        throw new Error(`Error in ${op === 'get' ? 'fetching' : 'saving'} data request`);
+        throw new Error(`${op === 'get' ? 'Fetching' : 'Saving'} data request failed`);
     }
 
     if (res.ok) {

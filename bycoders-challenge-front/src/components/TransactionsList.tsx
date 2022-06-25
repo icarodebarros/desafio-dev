@@ -10,7 +10,6 @@ export type dataSourceType = 'fromDB' | 'fromFile';
 interface TransactionsListProps {
     dbTransactions: FinancialMovement[];
     fileTransactions: FinancialMovement[];
-    isFileRadioEnabled: boolean;
 }
 
 const TransactionsList: React.FC<TransactionsListProps> = (props) => {
@@ -26,8 +25,8 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
     }, [props.dbTransactions, props.fileTransactions]);
 
     useEffect(() => {
-      onRadioChange(props.isFileRadioEnabled ? 'fromFile' : 'fromDB');
-    }, [props.isFileRadioEnabled]);
+      onRadioChange(props.fileTransactions.length ? 'fromFile' : 'fromDB');
+    }, [props.fileTransactions.length]);
 
     const loadStoreOptions = (dataSource: dataSourceType) => {
       const storeNames: string[] = [];
@@ -45,7 +44,6 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
     }
 
     const onRadioChange = (selected: dataSourceType) => {
-      // const selected = ev.target.value as dataSourceType;
       setSelectedDataSource(selected);
       loadStoreOptions(selected);
       setFilteredTransactions([]);
@@ -93,19 +91,20 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                   <div className={classes.radioGroup}>
                       <label>
                         <input type="radio" name="dataSource" value={'fromDB'} 
+                          disabled={!props.dbTransactions.length}
                           checked={selectedDataSource === 'fromDB'}
                           onChange={(ev) => onRadioChange(ev.target.value as dataSourceType)}
                         />
-                        <span>database</span>
+                        <span className={!props.dbTransactions.length ? classes.disabled: ''}>database</span>
                       </label>
 
                       <label>
                         <input type="radio" name="dataSource" value="fromFile"
-                          disabled={!props.isFileRadioEnabled}
+                          disabled={!props.fileTransactions.length}
                           checked={selectedDataSource === 'fromFile'}
                           onChange={(ev) => onRadioChange(ev.target.value as dataSourceType)}
                         />
-                        <span className={!props.isFileRadioEnabled ? classes.disabled: ''}>current file</span>                        
+                        <span className={!props.fileTransactions.length ? classes.disabled: ''}>current file</span>                        
                       </label>
                   </div>
                 </div>
