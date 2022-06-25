@@ -31,3 +31,8 @@ body {
 .valueR {
   color: red;
 }
+
+.error-msg {
+  color: red;
+  font-style: italic;
+}

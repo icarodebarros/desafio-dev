@@ -7,8 +7,11 @@ import { APIConnectService } from './services/apiConnect.service';
 import './App.css';
 
 function App() {
-  const [transactions, setTransactions] = useState<FinancialMovement[]>([]);
+  const [transactions, setTransactions] = useState<FinancialMovement[] | null>([]);
+  const [fileTransactions, setFileTransactions] = useState<FinancialMovement[]>([]);
   const [dataSource, setDataSource] = useState<dataSourceType>('fromDB');
+  const [isFileCorrect, setIsFileCorrect] = useState<boolean>(false);
+  const [dbDataErrorMessage, setDbDataErrorMessage] = useState<string>();
 
   useEffect(() => {
     APIConnectService.fetchTransactions()
@@ -21,23 +24,38 @@ function App() {
         setDataSource('fromDB');
       })
       .catch((err) => {
-        console.error(err);
+        setTransactions(null);
+        setDbDataErrorMessage(`Unable to fetch data from API - ${err}`);
       })
   }, []);
+
+  const transactionsFromFile = (t: FinancialMovement[]) => {
+    setFileTransactions(t);
+    if (t.length) setIsFileCorrect(true);
+  };
 
   return (
     <div className="App">
       <p>ByCodersTec / desafio-dev</p>
 
       <div className='form-container card'>
-        <Upload onSetTransactions={setTransactions}></Upload>
+        <Upload onSetTransactions={transactionsFromFile}></Upload>
       </div>
 
-      {!!transactions.length && (
+      {!!transactions && (
         <TransactionsList 
           transactions={transactions}
+          fileTransactions={fileTransactions}
           dataSource={dataSource}
+          isFileRadioEnabled={isFileCorrect}
         />
+      )}
+      {(!transactions && dbDataErrorMessage) && (
+        <div className='card'>
+          <span className='error-msg'>
+            {dbDataErrorMessage}
+          </span>
+        </div>
       )}
 
     </div>   

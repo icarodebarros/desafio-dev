@@ -9,6 +9,7 @@ export type dataSourceType = 'fromDB' | 'fromFile';
 
 interface TransactionsListProps {
     transactions: FinancialMovement[];
+    fileTransactions: FinancialMovement[];
     dataSource: dataSourceType;
     isFileRadioEnabled: boolean;
 }
@@ -16,32 +17,43 @@ interface TransactionsListProps {
 const TransactionsList: React.FC<TransactionsListProps> = (props) => {
     const [storeOptions, setStoreOptions] = useState<JSX.Element[]>([]);
     const [filteredTransactions, setFilteredTransactions] = useState<FinancialMovement[]>([]);
+    const [selectedDataSource, setSelectedDataSource] = useState<dataSourceType>('fromDB');
 
     useEffect(() => {
-        loadStoreOptions();
-    }, [props.transactions]);
+        loadStoreOptions(selectedDataSource);
+    }, [props.transactions, props.fileTransactions]);
 
-    const loadStoreOptions = () => {
-        const storeNames: string[] = [];
-        props.transactions.forEach(item => {
-          const index = storeNames.findIndex((storeName) => storeName === item.storeName);
-          if (index === -1) {
-            storeNames.push(item.storeName.trim());
-          }
-        })
-        const options = storeNames.map(storeName => (
-          <option value={storeName} key={storeName}>{storeName}</option>
-        ));
-        setStoreOptions(options);
+    useEffect(() => {
+      setSelectedDataSource(props.dataSource);
+      loadStoreOptions(props.dataSource);
+    }, [props.dataSource]);
+
+    const loadStoreOptions = (dataSource: dataSourceType) => {
+      const storeNames: string[] = [];
+      const t = dataSource === 'fromDB' ? props.transactions : props.fileTransactions;
+      t.forEach(item => {
+        const index = storeNames.findIndex((storeName) => storeName === item.storeName);
+        if (index === -1) {
+          storeNames.push(item.storeName.trim());
+        }
+      })
+      const options = storeNames.map(storeName => (
+        <option value={storeName} key={storeName}>{storeName}</option>
+      ));
+      setStoreOptions(options);
     }
 
     const onRadioChange = (ev: ChangeEvent<HTMLInputElement>) => {
-      console.log('onRadio', ev.target.value)
+      const selected = ev.target.value as dataSourceType;
+      setSelectedDataSource(selected);
+      loadStoreOptions(selected);
+      setFilteredTransactions([]);
     }
 
     const onSelectChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-        const store = ev.target.value;
-        setFilteredTransactions(props.transactions.filter(t => t.storeName === store));
+      const store = ev.target.value;
+      const movs = selectedDataSource === 'fromDB' ? props.transactions : props.fileTransactions;
+      setFilteredTransactions(movs.filter(t => t.storeName === store));
     }
 
     const getTransactionsList = () => {
@@ -80,7 +92,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                   <div className={classes.radioGroup}>
                       <label>
                         <input type="radio" name="dataSource" value="fromDB" 
-                          checked={props.dataSource === 'fromDB'}
+                          checked={selectedDataSource === 'fromDB'}
                           onChange={onRadioChange}
                         />
                         <span>database</span>
@@ -89,7 +101,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                       <label>
                         <input type="radio" name="dataSource" value="fromFile"
                           disabled={!props.isFileRadioEnabled}
-                          checked={props.dataSource === 'fromFile'}
+                          checked={selectedDataSource === 'fromFile'}
                           onChange={onRadioChange}
                         />
                         <span className={!props.isFileRadioEnabled ? classes.disabled: ''}>current file</span>                        
@@ -99,7 +111,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
 
                 <div className={classes.select}>
                   <select id='stores' onChange={onSelectChange} defaultValue='emptySelect'>
-                      <option value='emptySelect' key='select' disabled>Select a Store...</option>
+                      <option value='emptySelect' key='select'>Select a Store...</option>
                       {storeOptions}
                   </select>
                 </div>
