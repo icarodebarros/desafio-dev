@@ -6,6 +6,12 @@ const app = express();
 
 app.use(bodyParser.json()); // application/json
 
+app.use((_req, res, next) => { // Avoid CORS policy
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
 const connection = mysql.createConnection({
     host: 'mysql-container',
     user: 'root',
