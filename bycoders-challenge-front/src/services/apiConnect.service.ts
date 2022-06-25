@@ -21,36 +21,33 @@ const sendGetRequest = (url: string) => {
     })
 }
 
+const sendRequest = async (url: string, op: 'get' | 'post', data?: any) => {      
+        
+    let res;
+    try {
+        if (op === 'get') {
+            res = await sendGetRequest(url);
+        } else {
+            res = await sendPostRequest(url, data);
+        }
+    } catch(_err) {
+        throw new Error(`Error in ${op === 'get' ? 'fetching' : 'saving'} data request`);
+    }
+
+    if (res.ok) {
+        return res.json();
+    } else {
+        throw new Error(res.statusText);
+    }
+}
+
 export const APIConnectService = {
 
     saveTransactions: async (data: FinancialMovement[]) => {      
-        
-        let res;
-        try {
-            res = await sendPostRequest(API_URL, data);
-        } catch(_err) {
-            throw new Error('Error in saving data request');
-        }
-    
-        if (res.ok) {
-            return res.json();
-        } else {
-            throw new Error(res.statusText);
-        }
+        return sendRequest(API_URL, 'post', data);
     },
 
     fetchTransactions: async () => {
-        let res;
-        try {
-            res = await sendGetRequest(API_URL);
-        } catch(_err) {
-            throw new Error('Error in fetching data request');
-        }
-
-        if (res.ok) {
-            return res.json();
-        } else {
-            throw new Error(res.statusText);
-        }
+        return sendRequest(API_URL, 'get');
     }
 }
