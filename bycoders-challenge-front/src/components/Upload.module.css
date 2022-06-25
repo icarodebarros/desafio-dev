@@ -5,3 +5,24 @@
     align-items: center;
     gap: 0.5rem;
 }
+
+input[type="file"] {
+    display: none;
+}
+label.upFileLabel {
+    padding: 0.8rem 0.4rem;
+    border-radius: 5px;
+    width: 12rem;
+    background-color: darkslategrey;
+    color: white;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+}
+
+.feedbackMsg .success {
+    color: green;
+}
+.feedbackMsg .fail {
+    color: red;
+}
