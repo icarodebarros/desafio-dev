@@ -12,6 +12,10 @@ function App() {
   const [dbDataErrorMessage, setDbDataErrorMessage] = useState<string>();
 
   useEffect(() => {
+    getDataFromAPI();
+  }, []);
+
+  const getDataFromAPI = () => {
     APIConnectService.fetchTransactions()
       .then((res) => {
         console.log(res);        
@@ -23,7 +27,7 @@ function App() {
       .catch((err) => {
         setDbDataErrorMessage(`Unable to fetch data from API - ${err}`);
       })
-  }, []);
+  };
 
   const transactionsFromFile = (t: FinancialMovement[]) => {
     setFileTransactions(t);
@@ -34,7 +38,10 @@ function App() {
       <p>ByCodersTec / desafio-dev</p>
 
       <div className='form-container card'>
-        <Upload onSetTransactions={transactionsFromFile}></Upload>
+        <Upload 
+          onSetTransactions={transactionsFromFile} 
+          onSaveFile={getDataFromAPI}
+        />
       </div>
 
       {(!!dbTransactions.length || !!fileTransactions.length) && (

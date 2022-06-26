@@ -19,11 +19,12 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
     const [selectedDataSource, setSelectedDataSource] = useState<dataSourceType>('fromDB');
 
     useEffect(() => {
-        loadStoreOptions(selectedDataSource);
-        if (selectedDataSource === 'fromFile' && !props.fileTransactions.length) {
-          setFilteredTransactions([]);
-        }
-    }, [props.dbTransactions, props.fileTransactions]);
+        onRadioChange('fromFile');
+    }, [props.fileTransactions]);
+
+    useEffect(() => {
+      onRadioChange('fromDB');
+  }, [props.dbTransactions]);
 
     useEffect(() => {
       onRadioChange(props.fileTransactions.length ? 'fromFile' : 'fromDB');

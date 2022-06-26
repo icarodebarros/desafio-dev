@@ -12,6 +12,7 @@ interface selectFileFeedback {
 
 interface UploadProps {
     onSetTransactions: (t: FinancialMovement[]) => void;
+    onSaveFile: () => void;
 }
 
 const Upload: React.FC<UploadProps> = (props) => {
@@ -57,9 +58,10 @@ const Upload: React.FC<UploadProps> = (props) => {
                     setIsSaveButtonEnabled(true);
                     
                     setFileSelectionMessage({
-                        successful: true,
-                        message: 'File selected successfuly'
+                      successful: true,
+                      message: 'File selected successfuly'
                     });
+                    setFileSavingMessage(undefined);
                 } catch (err: any) {
                     setFileSelectionMessage({
                         successful: false,
@@ -77,21 +79,28 @@ const Upload: React.FC<UploadProps> = (props) => {
     }
 
     const saveData = () => {
-        APIConnectService.saveTransactions(dataToSave)
-          .then((res) => {
-            console.log(res);
-            setFileSavingMessage({
-              successful: true,
-              message: 'File saved successfuly'
-            });          
-          })
-          .catch((err) => {
-            setFileSavingMessage({
-              successful: false,
-              message: err+''
-            });
-          })
-      }
+      APIConnectService.saveTransactions(dataToSave)
+        .then((res) => {
+          console.log(res);
+          setFileSavingMessage({
+            successful: true,
+            message: 'File saved successfuly'
+          }); 
+          
+          props.onSaveFile();
+          setIsSaveButtonEnabled(false);
+        })
+        .catch((err) => {
+          setFileSavingMessage({
+            successful: false,
+            message: err+''
+          });
+        })
+    };
+
+    const clearFile = () => {
+
+    }
   
     return (
         <form>
