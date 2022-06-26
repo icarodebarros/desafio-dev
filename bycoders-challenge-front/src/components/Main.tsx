@@ -8,7 +8,7 @@ import { TransactionsContext } from '../store/transactions-context';
 
 import './Main.css';
 
-function Main() {
+const Main: React.FC = () => {
   const transactionsCtx = useContext(TransactionsContext);
   const [dbDataErrorMessage, setDbDataErrorMessage] = useState<string>();
 
@@ -19,7 +19,6 @@ function Main() {
   const getDataFromAPI = () => {
     APIConnectService.fetchTransactions()
       .then((res) => {
-        console.log(res);        
         const transactionsList = (res as FinancialMovement[])
           .map(t => ({...t, datetime: new Date(t.datetime), value: +t.value}));
   

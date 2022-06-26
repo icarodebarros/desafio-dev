@@ -24,7 +24,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
 
     useEffect(() => {
       onRadioChange('fromDB');
-  }, [props.dbTransactions]);
+    }, [props.dbTransactions]);
 
     useEffect(() => {
       onRadioChange(props.fileTransactions.length ? 'fromFile' : 'fromDB');
@@ -33,16 +33,17 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
     const loadStoreOptions = (dataSource: dataSourceType) => {
       const storeNames: string[] = [];
       const t = dataSource === 'fromDB' ? props.dbTransactions : props.fileTransactions;
+      
       t.forEach(item => {
         const index = storeNames.findIndex((storeName) => storeName === item.storeName);
         if (index === -1) {
           storeNames.push(item.storeName.trim());
         }
       })
+      
       const options = storeNames.map(storeName => (
         <option value={storeName} key={storeName}>{storeName}</option>
       ));
-      console.log(options)
       setStoreOptions(options);
     }
 
