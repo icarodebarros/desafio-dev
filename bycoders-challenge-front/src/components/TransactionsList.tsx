@@ -116,7 +116,7 @@ const TransactionsList: React.FC<TransactionsListProps> = (props) => {
                 </div>
 
                 <div className={classes.select}>
-                  <select id='stores' onChange={onSelectChange} value={selectedOptionValue} defaultValue='empty'>
+                  <select id='stores' onChange={onSelectChange} value={selectedOptionValue}>
                       <option value='empty' key='empty'>Select a Store...</option>
                       {storeOptions}
                   </select>
