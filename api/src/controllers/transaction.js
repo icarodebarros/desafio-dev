@@ -1,5 +1,8 @@
 const FinancialMovement = require('../models/financialMovement');
 
+/**
+ * List all the financial movements
+ */
 exports.getAllTransactions = async (_req, res, _next) => {
   try {
     const transactions = await FinancialMovement.findAll();
@@ -9,6 +12,9 @@ exports.getAllTransactions = async (_req, res, _next) => {
   }
 };
 
+/**
+ * Save a list of financial movements
+ */
 exports.postListTransactions = async (req, res, _next) => {
   const list = req.body;
 
