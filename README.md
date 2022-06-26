@@ -13,10 +13,9 @@ Além da possibilidade de salvar esses dados, ainda é possível visualizar as t
 ## Configuração
 
 O projeto foi desenvolvido para funcionar em 3 contêiners docker (db, api, react app), logo, para rodá-lo basta:
-1. Ter o docker instalado no ambiente
-2. Abrir o terminal na raiz do projeto
-3. Rodar o comando `docker-compose up -d`
+1. Ter o docker e o node instalados no ambiente;
+3. Abrir o terminal na pasta da API (`desafio-dev/api`) e instalar as dependências pelo comando `npm i`;
+4. Repetir o passo acima na pasta do App React (`desafio-dev/bycoders-challenge-front`);
+5. Na raiz do projeto rodar o comando `docker-compose up -d`;
 
-OBS1.: O front roda na porta 3000, e o back na 9001
-
-OBS2.: Caso o log da api apresente erro de conecção com o banco (ECONNREFUSED) da primeira vez que executar, basta reiniciar o container (apenas da API).
+OBS: O front roda na porta 3000, e o back na 9001
