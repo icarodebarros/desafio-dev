@@ -23,13 +23,14 @@ const Upload: React.FC<UploadProps> = (props) => {
 
     const onChange = (ev: ChangeEvent<HTMLInputElement>) => {
         setIsSaveButtonEnabled(false);
-        const textType = /text.*/;
-        const extension = (ev.target.value as string).split('.')[1];
+
         if (ev.target.files && ev.target.files[0]) {
             setFileSelectionMessage(undefined);
             setDataToSave([]);
             props.onSetTransactions([]);
-
+          
+            const textType = /text.*/;
+            const extension = (ev.target.value as string).split('.')[1];
             if (ev.target.files[0].type.match(textType) && extension === 'txt') {
                 parseFile(ev);
             } else {
