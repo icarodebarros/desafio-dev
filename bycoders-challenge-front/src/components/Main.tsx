@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FinancialMovement } from '../models/financialMovement';
 import { APIConnectService } from '../services/apiConnect.service';
 import TransactionsList from './TransactionsList';
 import Upload from './Upload';
 
+import { TransactionsContext } from '../store/transactions-context';
+
 import './Main.css';
 
 function Main() {
-  const [dbTransactions, setDbTransactions] = useState<FinancialMovement[]>([]);
-  const [fileTransactions, setFileTransactions] = useState<FinancialMovement[]>([]);
+  const transactionsCtx = useContext(TransactionsContext);
   const [dbDataErrorMessage, setDbDataErrorMessage] = useState<string>();
 
   useEffect(() => {
@@ -22,7 +23,7 @@ function Main() {
         const transactionsList = (res as FinancialMovement[])
           .map(t => ({...t, datetime: new Date(t.datetime), value: +t.value}));
   
-        setDbTransactions(transactionsList);
+        transactionsCtx.setDbTransactions(transactionsList);
       })
       .catch((err) => {
         setDbDataErrorMessage(`Unable to fetch data from API - ${err}`);
@@ -30,7 +31,7 @@ function Main() {
   };
 
   const transactionsFromFile = (t: FinancialMovement[]) => {
-    setFileTransactions(t);
+    transactionsCtx.setFileTransactions(t);
   };
 
   return (
@@ -42,10 +43,10 @@ function Main() {
         />
       </div>
 
-      {(!!dbTransactions.length || !!fileTransactions.length) && (
+      {(!!transactionsCtx.dbTransactions.length || !!transactionsCtx.fileTransactions.length) && (
         <TransactionsList 
-          dbTransactions={dbTransactions}
-          fileTransactions={fileTransactions}
+          dbTransactions={transactionsCtx.dbTransactions}
+          fileTransactions={transactionsCtx.fileTransactions}
         />
       )}
       {(dbDataErrorMessage) && (
