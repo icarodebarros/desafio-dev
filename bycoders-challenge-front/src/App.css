@@ -6,33 +6,3 @@ body {
   width: 80%;
   margin: auto;
 }
-
-.form-container {
-  display: flex;
-  align-items: center;
-  border: solid 1px #c5c5c5;
-  justify-content: center;
-}
-.form-container p {
-  text-align: center;
-}
-
-.card {
-  background-color: white;
-  box-shadow: 0 2px 1px -1px #0003, 0 1px 1px #00000024, 0 1px 3px #0000001f;
-  padding: 1.5rem;
-  border-radius: 5px;
-  margin-bottom: 1rem;
-}
-
-.valueG {
-  color: green;
-}
-.valueR {
-  color: red;
-}
-
-.error-msg {
-  color: red;
-  font-style: italic;
-}
